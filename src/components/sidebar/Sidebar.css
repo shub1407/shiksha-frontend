@@ -1,0 +1,131 @@
+/* Sidebar.css */
+.sidebar {
+  width: 100%;
+  background-color: #2e5077;
+  color: #ffffff;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar .toggle-button {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.sidebar h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed h2 {
+  opacity: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul > li {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+  border-radius: 8px;
+}
+
+.sidebar ul > li:hover {
+  background-color: #033a5a;
+}
+
+.sidebar ul > li.active {
+  background-color: #063c52;
+  color: #f0f8ff;
+}
+
+.sidebar ul > li .icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.sidebar.collapsed ul > li .icon {
+  margin-right: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.sidebar.collapsed ul > li {
+  justify-content: center;
+}
+
+.submenu {
+  margin-top: 5px;
+  margin-left: 20px;
+  list-style: none;
+
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.submenu li {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+  border-radius: 6px;
+}
+
+.submenu li:hover {
+  background-color: #031f2f;
+  color: #ffffff;
+}
+
+.submenu .icon {
+  margin-right: 8px;
+  color: #ffffff;
+}
+
+.sidebar.collapsed .submenu {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+  .sidebar.collapsed {
+    width: 50px;
+  }
+  .sidebar h2 {
+    font-size: 1.2rem;
+  }
+  .sidebar ul > li {
+    font-size: 0.9rem;
+  }
+  .submenu li {
+    font-size: 0.8rem;
+  }
+}

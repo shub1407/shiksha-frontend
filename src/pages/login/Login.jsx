@@ -1,23 +1,46 @@
-import { useState } from "react"
+import { useState, useContext, useEffect } from "react"
 import "./Login.css"
 import clubLogo from "../../assets/logo.png" // Ensure you have the logo image in the assets folder
 import axios from "axios"
 import { backendUrl } from "../../utils/constants"
+import { AuthContext } from "../../context/AuthContext"
+import { useNavigate } from "react-router-dom"
 const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [role, setRole] = useState("admin")
   const [errorMessage, setErrorMessage] = useState("")
   const [loading, setLoading] = useState(false)
+  const {
+    setIsAuthenticated,
+    isAuthenticated,
+    setRole: setRoleContext,
+    loading: contextLoading,
+  } = useContext(AuthContext)
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/admin/dashboard")
+    } else {
+      navigate("/login")
+    }
+  }, [isAuthenticated])
+
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     const data = { email, password, role }
     e.preventDefault()
     setLoading(true)
     try {
-      const response = await axios.post(`${backendUrl}/login`, data)
+      const response = await axios.post(`${backendUrl}/login`, data, {
+        withCredentials: true,
+      })
       setErrorMessage("") // Clear any previous error messages
       console.log(response)
+      setIsAuthenticated(true)
+      setRoleContext(role)
+      navigate("/dashboard")
       alert("Login successful")
     } catch (error) {
       if (error.response) {
