@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom" // For navigating back to the homepage or login page
-
+import LogoutBtn from "../components/sidebar/LogoutBtn"
 const AccessDenied = () => {
   const navigate = useNavigate()
 

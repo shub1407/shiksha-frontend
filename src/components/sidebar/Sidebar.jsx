@@ -14,6 +14,7 @@ import { Link } from "react-router-dom"
 const Sidebar = () => {
   const [selected, setSelected] = useState("")
   const [showStudentsOptions, setShowStudentsOptions] = useState(false)
+  const [showClassesOptions, setShowClassesOptions] = useState(false)
   const [showTeacherOptions, setShowTeacherOptions] = useState(false)
   const [showModeratorOptions, setShowModeratorOptions] = useState(false)
   const [isExpanded, setIsExpanded] = useState(true) // Controls menu expansion
@@ -71,6 +72,35 @@ const Sidebar = () => {
           </ul>
         )}
         <li
+          className={selected === "classes" ? "active" : ""}
+          onClick={() => {
+            selected === "classes"
+              ? handleSelection("")
+              : handleSelection("classes")
+            setShowStudentsOptions(false)
+            setShowTeacherOptions(false)
+            setShowModeratorOptions(false)
+            setShowClassesOptions(!showClassesOptions)
+          }}
+        >
+          <FaChalkboardTeacher className="icon" />
+          {isExpanded && "Classes"}
+        </li>
+        {showClassesOptions && isExpanded && (
+          <ul className="submenu">
+            <Link to="/admin/add-section">
+              <li>
+                <FaPlus className="icon" /> Add Section
+              </li>
+            </Link>
+            <Link to="/admin/sections">
+              <li>
+                <FaList className="icon" /> Sections
+              </li>
+            </Link>
+          </ul>
+        )}
+        <li
           className={selected === "teacher" ? "active" : ""}
           onClick={() => {
             selected === "teacher"
@@ -78,6 +108,7 @@ const Sidebar = () => {
               : handleSelection("teacher")
             setShowModeratorOptions(false)
             setShowStudentsOptions(false)
+            setShowClassesOptions(false)
             setShowTeacherOptions(!showTeacherOptions)
           }}
         >
@@ -106,6 +137,7 @@ const Sidebar = () => {
               : handleSelection("moderator")
             setShowStudentsOptions(false)
             setShowTeacherOptions(false)
+            setShowClassesOptions(false)
             setShowModeratorOptions(!showModeratorOptions)
           }}
         >

@@ -13,7 +13,7 @@ const AllStudents = () => {
   useEffect(() => {
     // You can replace these with actual API calls to fetch available classes and sections
     const availableClasses = ["8", "9", "10", "11"] // Example classes
-    const availableSections = ["A", "B", "C"] // Example sections
+    const availableSections = ["A", "B", "C", "D"] // Example sections
 
     setClasses(availableClasses)
     setSections(availableSections)
@@ -120,7 +120,7 @@ const AllStudents = () => {
                   <td className="py-3 px-4">{student.admNo}</td>
                   <td className="py-3 px-4">{student.name}</td>
                   <td className="py-3 px-4">{student.class}</td>
-                  <td className="py-3 px-4">{student.section || "N/A"}</td>
+                  <td className="py-3 px-4">{student.sectionName || "N/A"}</td>
                   <td className="py-3 px-4">{student.contactNumber}</td>
                 </tr>
               ))

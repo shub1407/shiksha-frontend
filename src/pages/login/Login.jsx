@@ -41,7 +41,6 @@ const Login = () => {
       setIsAuthenticated(true)
       setRoleContext(role)
       navigate("/dashboard")
-      alert("Login successful")
     } catch (error) {
       if (error.response) {
         setErrorMessage(error.response.data.message)
