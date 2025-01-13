@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(true) // To handle initial loading
   const [role, setRole] = useState(null)
+  const [userId, setUserId] = useState(null)
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -23,7 +24,9 @@ export const AuthProvider = ({ children }) => {
         if (response.data.data.authenticated) {
           setIsAuthenticated(true)
           console.log("is Authenticated" + isAuthenticated)
-          setRole(response.data.data.user.role) // Optional: Set user role
+          setRole(response.data.data.user.role)
+          setUserId(response.data.data.user.id) // Optional: Set user ID
+          // Optional: Set user role
         } else {
           setIsAuthenticated(false)
         }
@@ -40,7 +43,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, role, setRole, loading }}
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        userId,
+        role,
+        setRole,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>

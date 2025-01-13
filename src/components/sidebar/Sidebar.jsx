@@ -8,8 +8,9 @@ import {
   FaPlus,
   FaList,
 } from "react-icons/fa"
+import { FaNoteSticky } from "react-icons/fa6"
 import logo from "../../assets/logo.png"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Sidebar = () => {
   const [selected, setSelected] = useState("")
@@ -17,8 +18,9 @@ const Sidebar = () => {
   const [showClassesOptions, setShowClassesOptions] = useState(false)
   const [showTeacherOptions, setShowTeacherOptions] = useState(false)
   const [showModeratorOptions, setShowModeratorOptions] = useState(false)
+  const [showAttendance, setShowAttendanceOptions] = useState(false)
   const [isExpanded, setIsExpanded] = useState(true) // Controls menu expansion
-
+  const navigate = useNavigate()
   const handleSelection = (section) => {
     setSelected(section)
   }
@@ -51,6 +53,7 @@ const Sidebar = () => {
               : handleSelection("students")
             setShowModeratorOptions(false)
             setShowTeacherOptions(false)
+            setShowAttendanceOptions(false)
             setShowStudentsOptions(!showStudentsOptions)
           }}
         >
@@ -80,6 +83,7 @@ const Sidebar = () => {
             setShowStudentsOptions(false)
             setShowTeacherOptions(false)
             setShowModeratorOptions(false)
+            setShowAttendanceOptions(false)
             setShowClassesOptions(!showClassesOptions)
           }}
         >
@@ -109,6 +113,7 @@ const Sidebar = () => {
             setShowModeratorOptions(false)
             setShowStudentsOptions(false)
             setShowClassesOptions(false)
+            setShowAttendanceOptions(false)
             setShowTeacherOptions(!showTeacherOptions)
           }}
         >
@@ -138,6 +143,7 @@ const Sidebar = () => {
             setShowStudentsOptions(false)
             setShowTeacherOptions(false)
             setShowClassesOptions(false)
+            setShowAttendanceOptions(false)
             setShowModeratorOptions(!showModeratorOptions)
           }}
         >
@@ -154,6 +160,47 @@ const Sidebar = () => {
             <Link to="/admin/moderators">
               <li>
                 <FaList className="icon" /> All Moderators
+              </li>
+            </Link>
+          </ul>
+        )}
+
+        <li
+          className={selected === "attendance" ? "active" : ""}
+          onClick={() => {
+            selected === "attendance"
+              ? handleSelection("")
+              : handleSelection("attendance")
+            setShowStudentsOptions(false)
+            setShowTeacherOptions(false)
+            setShowClassesOptions(false)
+            setShowModeratorOptions(false)
+            setShowAttendanceOptions(!showAttendance)
+            navigate("/admin/attendance")
+          }}
+        >
+          <FaNoteSticky className="icon" /> {isExpanded && "Attendance"}
+        </li>
+        {showAttendance && isExpanded && (
+          <ul className="submenu">
+            <Link to="/admin/attendance">
+              <li>
+                <FaPlus className="icon" /> Student Attendnce
+              </li>
+            </Link>
+            <Link to="/admin/teacher-attendance">
+              <li>
+                <FaPlus className="icon" /> Teacher Attendnce
+              </li>
+            </Link>
+            <Link to="/admin/attendance-report">
+              <li>
+                <FaList className="icon" /> Attendance Report
+              </li>
+            </Link>
+            <Link to="/admin/holiday-manager">
+              <li>
+                <FaList className="icon" /> Holiday Manager
               </li>
             </Link>
           </ul>

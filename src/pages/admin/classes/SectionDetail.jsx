@@ -307,7 +307,7 @@ export function SectionDetail() {
               >
                 {view === "teachers"
                   ? "Assign Selected Teacher"
-                  : "Assign selected teacher"}
+                  : "Assign Selected Students"}
               </button>
               <button
                 onClick={() => {

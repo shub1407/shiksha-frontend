@@ -1,0 +1,104 @@
+.attendance-container {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.attendance-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.fetch-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.fetch-button:hover {
+  background-color: #0056b3;
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: red;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.attendance-table {
+  max-width: 100%;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.attendance-table th,
+.attendance-table td {
+  border: 1px solid #ccc;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.attendance-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.attendance-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.attendance-table tr:hover {
+  background-color: #e9e9e9;
+}
+
+.status-present {
+  color: green;
+  font-weight: bold;
+}
+
+.status-absent {
+  color: red;
+  font-weight: bold;
+}
+
+.status-on_leave {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-NA {
+  color: gray;
+}
