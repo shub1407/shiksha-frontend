@@ -32,11 +32,19 @@ const Sidebar = () => {
   return (
     <div className={`sidebar ${isExpanded ? "expanded" : "collapsed"}`}>
       {/* logo & hamburger */}
-      <div
-        className="toggle-button items-center flex justify-between"
-        onClick={toggleSidebar}
-      >
-        <div className="h-12 w-12 overflow-hidden bg-inherit rounded-xl">
+      <div className="toggle-button items-center flex justify-between">
+        <div
+          onClick={() => {
+            navigate("/admin/dashboard")
+            setIsExpanded(true)
+            setShowStudentsOptions(false)
+            setShowTeacherOptions(false)
+            setShowClassesOptions(false)
+            setShowAttendanceOptions(false)
+            setShowModeratorOptions(false)
+          }}
+          className="h-12 w-12 overflow-hidden bg-inherit rounded-xl"
+        >
           <img src={logo} alt="" />
         </div>
         <div>

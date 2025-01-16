@@ -7,10 +7,13 @@ const TakeTeacherAttendance = () => {
   const [teachers, setTeachers] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [classInput, setClassInput] = useState("")
+  const [dayPref, setDayPref] = useState("")
+  const dayPreferences = ["Select day", "0", "1"]
   const [isAttendanceAlreadyMarked, setIsAttendanceAlreadyMarked] =
     useState(false)
   const { userId, role } = useContext(AuthContext)
-
+  const classes = ["Select Class", "6", "7", "8", "9", "10"]
   const handleFetchTeachers = async () => {
     if (!attendanceDate) {
       setError("Please provide a date.")
@@ -24,6 +27,7 @@ const TakeTeacherAttendance = () => {
         {
           attendanceDate,
           userType: "teacher",
+          classInput,
         }
       )
 
@@ -41,7 +45,7 @@ const TakeTeacherAttendance = () => {
 
       setIsAttendanceAlreadyMarked(false)
       const response = await axios.get(
-        "http://localhost:4000/api/admins/view-teachers"
+        `http://localhost:4000/api/admins/view-teachers/${classInput}?section=all&day=${dayPref}`
       )
       if (!response.data.error) {
         setTeachers(
@@ -72,10 +76,14 @@ const TakeTeacherAttendance = () => {
   }
 
   const handleSubmitAttendance = async () => {
-    const attendance = teachers.map(({ _id, isPresent }) => ({
-      id: _id,
-      status: isPresent ? "present" : "absent",
-    }))
+    const attendance = teachers.map(
+      ({ _id, isPresent, class: className, sectionName }) => ({
+        id: _id,
+        status: isPresent ? "present" : "absent",
+        class: className,
+        sectionName: sectionName,
+      })
+    )
 
     if (!attendanceDate) {
       setError("Please provide a date.")
@@ -87,13 +95,16 @@ const TakeTeacherAttendance = () => {
       markedById: userId,
       markedByRole: role,
     }
+    console.log(userId)
+    console.log(role)
+    console.log(obj)
 
     try {
       setLoading(true)
       setError("")
 
       const response = await axios.post(
-        "http://localhost:4000/api/attendance/mark-attendance",
+        "http://localhost:4000/api/attendance/mark-attendance-teacher",
         obj
       )
 
@@ -104,7 +115,34 @@ const TakeTeacherAttendance = () => {
         setTeachers([]) // Clear teachers after submission
       }
     } catch (err) {
-      setError("An error occurred while submitting attendance.")
+      if (error.response) {
+        setError(error.response.data.message)
+      } else setError("An error occurred while submitting attendance.")
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+  const handleEditAttendance = async () => {
+    setLoading(true)
+    setError("")
+    try {
+      setIsAttendanceAlreadyMarked(false)
+      const response = await axios.get(
+        `http://localhost:4000/api/admins/view-teachers`
+      )
+      if (!response.data.error) {
+        setTeachers(
+          response.data.data.map((teacher) => ({
+            ...teacher,
+            isPresent: false,
+          }))
+        )
+      } else {
+        setError(response.data.message || "Error fetching teacher.")
+      }
+    } catch (err) {
+      setError("An error occurred while fetching teacher.")
       console.log(err)
     } finally {
       setLoading(false)
@@ -116,6 +154,38 @@ const TakeTeacherAttendance = () => {
       <h1 style={styles.heading}>Teacher Attendance Sheet</h1>
       <div style={styles.formContainer}>
         <div style={styles.formGroup}>
+          <label style={styles.label}>Class:</label>
+          <select
+            value={classInput}
+            onChange={(e) => setClassInput(e.target.value)}
+            style={styles.dropdown}
+          >
+            {classes.map((cls, index) => (
+              <option key={index} value={cls === "Select Class" ? "" : cls}>
+                {cls}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Day pref:</label>
+          <select
+            value={dayPref}
+            onChange={(e) => setDayPref(e.target.value)}
+            style={styles.dropdown}
+          >
+            {dayPreferences.map((day, index) => (
+              <option key={index} value={day === "Select day" ? "" : day}>
+                {day === "0"
+                  ? "Mon-Wed"
+                  : day === "1"
+                    ? "Thurs-Sat"
+                    : "Select day"}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div style={styles.formGroup}>
           <label style={styles.label}>Date:</label>
           <input
             type="date"
@@ -124,6 +194,7 @@ const TakeTeacherAttendance = () => {
             style={styles.input}
           />
         </div>
+
         <button
           onClick={handleFetchTeachers}
           disabled={loading}
@@ -144,6 +215,9 @@ const TakeTeacherAttendance = () => {
               <tr>
                 <th style={styles.th}>Teacher ID</th>
                 <th style={styles.th}>Teacher Name</th>
+                <th style={styles.th}>Class</th>
+                <th style={styles.th}>Section</th>
+                <th style={styles.th}>Assigned Day</th>
                 <th style={styles.th}>Days Present</th>
                 <th style={styles.th}>Status</th>
               </tr>
@@ -151,12 +225,29 @@ const TakeTeacherAttendance = () => {
             <tbody>
               {teachers.map((teacher) => (
                 <tr key={teacher._id} style={styles.tr}>
-                  <td style={styles.td}>{teacher.userId.staffId}</td>
-                  <td style={styles.td}>{teacher.name}</td>
-                  <td style={styles.td}>{teacher.totalDaysPresent}</td>
-                  <td style={styles.td}>{teacher.status}</td>
+                  <td style={styles.td}>{teacher?.userId?.rollNo}</td>
+                  <td style={styles.td}>{teacher?.userId?.name}</td>
+                  <td style={styles.td}>{teacher?.userId?.class}</td>
+                  <td style={styles.td}>{teacher?.userId?.sectionName}</td>
+                  <td style={styles.td}>
+                    {teacher?.userId?.assignedDays == 0
+                      ? "Mon-Wed"
+                      : "Thur-Sat"}
+                  </td>
+                  <td style={styles.td}>{teacher?.userId?.totalDaysPresent}</td>
+                  <td style={styles.td}>{teacher?.status}</td>
                 </tr>
               ))}
+              <button
+                onClick={() => {
+                  setIsAttendanceAlreadyMarked(false)
+                  handleEditAttendance()
+                  //TODO:fix the total present day status
+                }}
+                style={styles.submitButton}
+              >
+                Edit Attendance
+              </button>
             </tbody>
           </table>
         </div>
@@ -205,7 +296,7 @@ const TakeTeacherAttendance = () => {
           </table>
           <button
             onClick={() => {
-              alert("Undder Construction")
+              handleSubmitAttendance()
             }}
             style={styles.submitButton}
           >
@@ -245,6 +336,14 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  dropdown: {
+    padding: "10px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    fontSize: "14px",
+    width: "200px",
+    backgroundColor: "#fff",
   },
   label: {
     fontWeight: "bold",

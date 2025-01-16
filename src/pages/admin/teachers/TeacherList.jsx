@@ -16,9 +16,15 @@ const TeacherList = () => {
     // Fetch teacher data from API
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:4000/api/admins/view-teachers/${selectedClass}?section=all&day=all`
-        )
+        let response
+        if (selectedClass === "all") {
+          response = await axios.get(
+            `http://localhost:4000/api/admins/view-teachers`
+          )
+        } else
+          response = await axios.get(
+            `http://localhost:4000/api/admins/view-teachers/${selectedClass}?section=all&day=all`
+          )
         setTeachers(response.data.data)
         setFilteredTeachers(response.data.data)
         setLoading(false)
@@ -37,6 +43,7 @@ const TeacherList = () => {
     if (selectedClass !== "all") {
       filtered = filtered.filter((teacher) => teacher.class === selectedClass)
     }
+
     if (selectedDay !== "all") {
       filtered = filtered.filter(
         (teacher) => teacher.assignedDays === selectedDay
@@ -52,6 +59,7 @@ const TeacherList = () => {
         (teacher) => teacher.sectionName === selectedSections
       )
     }
+    console.log(teachers)
 
     setFilteredTeachers(filtered)
   }

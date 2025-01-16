@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+
 const AllStudents = () => {
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
@@ -11,7 +12,6 @@ const AllStudents = () => {
 
   // Fetch classes and sections on mount
   useEffect(() => {
-    // You can replace these with actual API calls to fetch available classes and sections
     const availableClasses = ["8", "9", "10", "11"] // Example classes
     const availableSections = ["A", "B", "C", "D"] // Example sections
 
@@ -23,13 +23,11 @@ const AllStudents = () => {
   useEffect(() => {
     setLoading(true)
 
-    // Build the URL for fetching students
     let url = `http://localhost:4000/api/admins/students/${selectedClass}`
     if (selectedSection) {
       url += `?section=${selectedSection}`
     }
 
-    // Fetch students data from the API
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
@@ -40,21 +38,21 @@ const AllStudents = () => {
         console.error("Error fetching students:", error)
         setLoading(false)
       })
-  }, [selectedClass, selectedSection]) // Re-run the effect when the selected class or section changes
+  }, [selectedClass, selectedSection])
 
   if (loading) {
     return <p className="text-center text-gray-500">Loading...</p>
   }
 
   return (
-    <div className="border-2 border-black border-solid flex flex-col  p-4">
+    <div className="border-2 border-black border-solid flex flex-col p-4">
       <h2 className="text-3xl font-semibold text-center mb-6">
         Student Information
       </h2>
 
       {/* Filters Section */}
-      <div className="mb-6 flex justify-between">
-        <div className="w-1/3">
+      <div className="mb-6 flex flex-wrap gap-4 sm:justify-between">
+        <div className="w-full sm:w-1/3">
           <label htmlFor="class" className="block text-lg font-medium mb-2">
             Class
           </label>
@@ -73,7 +71,7 @@ const AllStudents = () => {
           </select>
         </div>
 
-        <div className="w-1/3">
+        <div className="w-full sm:w-1/3">
           <label htmlFor="section" className="block text-lg font-medium mb-2">
             Section
           </label>
@@ -94,6 +92,7 @@ const AllStudents = () => {
         </div>
       </div>
 
+      {/* Students Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg border-t border-gray-300">
         <table className="min-w-full bg-white border-collapse">
           <thead>
@@ -112,9 +111,7 @@ const AllStudents = () => {
                   key={student._id}
                   className="hover:bg-[#f1f1f1] transition-colors duration-300 cursor-pointer select-none"
                   onClick={() => {
-                    // Add your custom logic to handle student selection
                     navigate(`/admin/student/${student._id}`)
-                    console.log("Selected student:", student)
                   }}
                 >
                   <td className="py-3 px-4">{student.admNo}</td>
@@ -126,7 +123,7 @@ const AllStudents = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="text-center py-3">
+                <td colSpan="5" className="text-center py-3">
                   No students found.
                 </td>
               </tr>

@@ -72,7 +72,7 @@ const AddTeacher = () => {
         <div>
           <label className="block text-gray-700">Roll No:</label>
           <input
-            type="number"
+            type="text"
             name="rollNo"
             value={formData.rollNo}
             onChange={handleChange}
@@ -127,7 +127,7 @@ const AddTeacher = () => {
         <div>
           <label className="block text-gray-700">Class:</label>
           <input
-            type="number"
+            type="text"
             name="class"
             value={formData.class}
             onChange={handleChange}

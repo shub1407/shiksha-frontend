@@ -7,6 +7,7 @@ const AttendanceStatus = () => {
   const [holidays, setHolidays] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [userType, setUserType] = useState("teacher")
   const [filters, setFilters] = useState({
     class: "9",
     sectionName: "A",
@@ -14,6 +15,7 @@ const AttendanceStatus = () => {
     year: new Date().getFullYear(),
   })
   const [detailShown, setDetailShown] = useState({
+    userType: "",
     month: "",
     year: "",
     class: "",
@@ -57,8 +59,13 @@ const AttendanceStatus = () => {
       setLoading(true)
       setError("")
       const { class: className, sectionName, month, year } = filters
-      const response = await axios.get(
-        `http://localhost:4000/api/attendance/report/${className}/${sectionName}/${month}/${year}`
+      let response
+
+      response = await axios.post(
+        `http://localhost:4000/api/attendance/report/${className}/${sectionName}/${month}/${year}`,
+        {
+          userType,
+        }
       )
       const obj = {
         month,
@@ -169,6 +176,21 @@ const AttendanceStatus = () => {
       {/* Filter Section */}
       <div className="filters">
         <div className="filter-group">
+          <label htmlFor="userType">UserType</label>
+          <select
+            className="filter-input"
+            value={userType}
+            name="userType"
+            id="userType"
+            onChange={(e) => {
+              setUserType(e.target.value)
+            }}
+          >
+            <option value="teacher">Teacher</option>
+            <option value="student">Student</option>
+          </select>
+        </div>
+        <div className="filter-group">
           <label>Class:</label>
           <input
             type="text"
@@ -178,16 +200,19 @@ const AttendanceStatus = () => {
             className="filter-input"
           />
         </div>
-        <div className="filter-group">
-          <label>Section:</label>
-          <input
-            type="text"
-            name="sectionName"
-            value={filters.sectionName}
-            onChange={handleFilterChange}
-            className="filter-input"
-          />
-        </div>
+        {userType === "student" && (
+          <div className="filter-group">
+            <label>Section:</label>
+            <input
+              type="text"
+              name="sectionName"
+              value={filters.sectionName}
+              onChange={handleFilterChange}
+              className="filter-input"
+            />
+          </div>
+        )}
+
         <div className="filter-group">
           <label>Month:</label>
           <input
@@ -233,17 +258,24 @@ const AttendanceStatus = () => {
       ) : (
         attendanceData.length > 0 && (
           <div className="table-container">
-            <h2 className="text-xl font-bold underline">
+            <h2 className="text-2xl text-center font-bold ">
+              {userType === "student"
+                ? "Students Attendance Report"
+                : "Teachers Attendance Report"}
+            </h2>
+            <h2 className="text-xl text-center font-bold underline">
               Attendance Report of {detailShown.month}/{detailShown.year} for
-              class {detailShown.class} {detailShown.section}
+              class {detailShown.class}{" "}
+              {userType === "student" && detailShown.section}
             </h2>
             <table className="attendance-table">
               <thead>
                 <tr>
-                  <th>Adm No</th>
+                  <th>{userType === "student" ? "Adm No" : "Roll No"}</th>
                   <th>Name</th>
                   <th>Class</th>
                   <th>Section</th>
+                  {userType === "teacher" && <th>Day Pref</th>}
                   {daysInMonth.map(({ date, day }) => (
                     <th key={date}>
                       {date.split("-")[2]} <br /> {day}
@@ -256,10 +288,21 @@ const AttendanceStatus = () => {
               <tbody>
                 {attendanceData.map((student) => (
                   <tr key={student._id}>
-                    <td>{student.admNo}</td>
+                    <td>
+                      {userType === "student" ? student.admNo : student.rollNo}
+                    </td>
                     <td>{student.name}</td>
                     <td>{student.class}</td>
                     <td>{student.sectionName}</td>
+                    {userType === "teacher" && (
+                      <td>
+                        {student.dayPref === "0"
+                          ? "Mon-Wed"
+                          : student.dayPref === "1"
+                            ? "Thurs-Fri"
+                            : ""}
+                      </td>
+                    )}
                     {daysInMonth.map(({ date }) => {
                       const status = getAttendanceForDay(
                         student.attendance,
