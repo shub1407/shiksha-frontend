@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { backendUrl } from "../../../utils/constants"
-
+import axios from "axios"
 const AllStudents = () => {
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
@@ -13,11 +13,17 @@ const AllStudents = () => {
 
   // Fetch classes and sections on mount
   useEffect(() => {
-    const availableClasses = ["8", "9", "10", "11"] // Example classes
-    const availableSections = ["A", "B", "C", "D"] // Example sections
+    const fetchClass = async (req, res) => {
+      const response = await axios.get(`${backendUrl}/api/admins/all-classes`)
+      const availableClasses = response.data.data.classes
+      const availableSections = response.data.data.sections
+      console.log(availableSections[9])
+      setLoading(false)
+      setClasses(availableClasses)
+      setSections(availableSections)
+    }
 
-    setClasses(availableClasses)
-    setSections(availableSections)
+    fetchClass()
   }, [])
 
   // Fetch students based on selected class and section
@@ -84,11 +90,13 @@ const AllStudents = () => {
             disabled={!selectedClass}
           >
             <option value="">All</option>
-            {sections.map((section) => (
-              <option key={section} value={section}>
-                {section}
-              </option>
-            ))}
+            {selectedClass &&
+              sections[selectedClass].map((section) => (
+                <option key={section} value={section}>
+                  {section}
+                </option>
+              ))}
+            <option value="none">None</option>
           </select>
         </div>
       </div>

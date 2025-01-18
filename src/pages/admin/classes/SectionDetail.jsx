@@ -366,6 +366,11 @@ export function SectionDetail() {
       {view === "teachers" && (
         <div>
           <h2 style={{ color: "#333" }}>Teachers</h2>
+          {data.teachers.length === 0 && (
+            <p className="text-2xl font-bold">
+              No teachers found for given section!!
+            </p>
+          )}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
             {data.teachers.map((teacher) => (
               <div

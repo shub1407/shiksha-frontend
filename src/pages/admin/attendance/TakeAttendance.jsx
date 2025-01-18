@@ -1,7 +1,9 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import axios from "axios"
 import { AuthContext } from "../../../context/AuthContext"
 import { backendUrl } from "../../../utils/constants"
+import { use } from "react"
+import { selectClasses } from "@mui/material"
 const Attendance = () => {
   const [classInput, setClassInput] = useState("")
   const [sectionInput, setSectionInput] = useState("")
@@ -12,8 +14,22 @@ const Attendance = () => {
   const [isAttendanceAlreadyMarked, setIsAttendanceAlreadyMarked] =
     useState(false)
   const { userId, role } = useContext(AuthContext)
-  const classes = ["Select Class", "6", "7", "8", "9", "10"]
-  const sections = ["Select Section", "A", "B", "C", "D"]
+
+  const [classes, setClasses] = useState([])
+  const [sections, setSections] = useState([])
+  useEffect(() => {
+    const fetchClass = async (req, res) => {
+      const response = await axios.get(`${backendUrl}/api/admins/all-classes`)
+      const availableClasses = response.data.data.classes
+      const availableSections = response.data.data.sections
+      console.log(availableSections[9])
+      setLoading(false)
+      setClasses(availableClasses)
+      setSections(availableSections)
+    }
+
+    fetchClass()
+  }, [])
 
   const handleFetchStudents = async () => {
     if (!classInput || !sectionInput || !attendanceDate) {
@@ -124,6 +140,7 @@ const Attendance = () => {
       attendanceData: attendance,
       markedById: userId,
       markedByRole: role,
+      userType: "student",
     }
     console.log(obj)
 
@@ -153,15 +170,21 @@ const Attendance = () => {
   }
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>Attendance Sheet</h1>
+      <h1 style={styles.heading}>Attendance Sheet Of Student</h1>
       <div style={styles.formContainer}>
         <div style={styles.formGroup}>
           <label style={styles.label}>Class:</label>
           <select
             value={classInput}
-            onChange={(e) => setClassInput(e.target.value)}
+            onChange={(e) => {
+              setClassInput(e.target.value)
+              setStudents([])
+              setIsAttendanceAlreadyMarked(false)
+              setError("")
+            }}
             style={styles.dropdown}
           >
+            <option value="">Select Class</option>
             {classes.map((cls, index) => (
               <option key={index} value={cls === "Select Class" ? "" : cls}>
                 {cls}
@@ -176,11 +199,13 @@ const Attendance = () => {
             onChange={(e) => setSectionInput(e.target.value)}
             style={styles.dropdown}
           >
-            {sections.map((sec, index) => (
-              <option key={index} value={sec === "Select Section" ? "" : sec}>
-                {sec}
-              </option>
-            ))}
+            <option value="">Select Section</option>
+            {classInput &&
+              sections[classInput].map((sec, index) => (
+                <option key={index} value={sec === "Select Section" ? "" : sec}>
+                  {sec}
+                </option>
+              ))}
           </select>
         </div>
         <div style={styles.formGroup}>

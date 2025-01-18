@@ -3,16 +3,21 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { backendUrl } from "../../../utils/constants"
 const AllSections = () => {
-  const [classes, setClasses] = useState([])
   const [selectedClass, setSelectedClass] = useState("9")
   const [sections, setSections] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [newSectionName, setNewSectionName] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const classes = []
+  for (let i = 1; i <= 12; i++) {
+    classes.push(i.toString())
+  }
+  console.log(classes)
   // Fetch sections of the selected class
   const fetchSections = async () => {
     try {
+      setLoading(true)
       const response = await axios.get(
         `${backendUrl}/api/admins/class/${selectedClass}`
       )
@@ -76,8 +81,11 @@ const AllSections = () => {
         }}
       >
         <option value="">-- Select a Class --</option>
-        <option value="9">Class 9</option>
-        <option value="10">Class 10</option>
+        {classes.map((classNumber) => (
+          <option key={classNumber} value={classNumber}>
+            Class {classNumber}
+          </option>
+        ))}
         {/* Add more class options as needed */}
       </select>
 
@@ -92,31 +100,42 @@ const AllSections = () => {
           marginBottom: "20px",
         }}
       >
-        {sections.map((section) => (
-          <div
-            key={section._id}
-            style={{
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              backgroundColor: "#fff",
-              cursor: "pointer",
-            }}
-            onClick={() => navigate(`/admin/sections/${section._id}`)}
-          >
-            <h2 style={{ marginBottom: "10px" }}>Section: {section.name}</h2>
+        {!loading && sections.length == 0 && (
+          <div>
+            <h1 className="text-xl font-bold">No Section found!!</h1>
             <p>
-              <strong>Class:</strong> {section.class}
-            </p>
-            <p>
-              <strong>No. of Students:</strong> {section.students.length}
-            </p>
-            <p>
-              <strong>No. of Teachers:</strong> {section.teachers.length}
+              Please add a new section for this class by clicking on the "Add
+              Section" button below.
             </p>
           </div>
-        ))}
+        )}
+        {!loading &&
+          sections.length > 0 &&
+          sections.map((section) => (
+            <div
+              key={section._id}
+              style={{
+                padding: "20px",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                backgroundColor: "#fff",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate(`/admin/sections/${section._id}`)}
+            >
+              <h2 style={{ marginBottom: "10px" }}>Section: {section.name}</h2>
+              <p>
+                <strong>Class:</strong> {section.class}
+              </p>
+              <p>
+                <strong>No. of Students:</strong> {section.students.length}
+              </p>
+              <p>
+                <strong>No. of Teachers:</strong> {section.teachers.length}
+              </p>
+            </div>
+          ))}
       </div>
 
       {/* Button to add a new section */}

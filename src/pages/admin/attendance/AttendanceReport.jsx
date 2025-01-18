@@ -28,7 +28,20 @@ const AttendanceStatus = () => {
   //   useEffect(() => {
 
   //   }, [filters])
-
+  const monthDropdown = [
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ]
   useEffect(() => {
     calculateTotals()
   }, [attendanceData, daysInMonth, holidays])
@@ -190,13 +203,26 @@ const AttendanceStatus = () => {
         </div>
         <div className="filter-group">
           <label>Class:</label>
-          <input
+          {/* <input
             type="text"
             name="class"
             value={filters.class}
             onChange={handleFilterChange}
             className="filter-input"
-          />
+          /> */}
+          <select
+            className="filter-input"
+            value={filters.class}
+            name="class"
+            id="class"
+            onChange={handleFilterChange}
+          >
+            {Array.from({ length: 10 }, (_, index) => index + 1).map((num) => (
+              <option key={num} value={num}>
+                Class {num}
+              </option>
+            ))}
+          </select>
         </div>
         {userType === "student" && (
           <div className="filter-group">
@@ -213,7 +239,7 @@ const AttendanceStatus = () => {
 
         <div className="filter-group">
           <label>Month:</label>
-          <input
+          {/* <input
             type="number"
             name="month"
             value={filters.month}
@@ -221,7 +247,20 @@ const AttendanceStatus = () => {
             className="filter-input"
             min="1"
             max="12"
-          />
+          /> */}
+          <select
+            className="filter-input"
+            value={filters.month}
+            name="month"
+            id="month"
+            onChange={handleFilterChange}
+          >
+            {monthDropdown.map((month, index) => (
+              <option key={index + 1} value={index + 1}>
+                {month.toUpperCase()}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="filter-group">
           <label>Year:</label>

@@ -82,36 +82,7 @@ const Sidebar = () => {
             </Link>
           </ul>
         )}
-        <li
-          className={selected === "classes" ? "active" : ""}
-          onClick={() => {
-            selected === "classes"
-              ? handleSelection("")
-              : handleSelection("classes")
-            setShowStudentsOptions(false)
-            setShowTeacherOptions(false)
-            setShowModeratorOptions(false)
-            setShowAttendanceOptions(false)
-            setShowClassesOptions(!showClassesOptions)
-          }}
-        >
-          <FaChalkboardTeacher className="icon" />
-          {isExpanded && "Classes"}
-        </li>
-        {showClassesOptions && isExpanded && (
-          <ul className="submenu">
-            <Link to="/admin/add-section">
-              <li>
-                <FaPlus className="icon" /> Add Section
-              </li>
-            </Link>
-            <Link to="/admin/sections">
-              <li>
-                <FaList className="icon" /> Sections
-              </li>
-            </Link>
-          </ul>
-        )}
+
         <li
           className={selected === "teacher" ? "active" : ""}
           onClick={() => {
@@ -172,7 +143,31 @@ const Sidebar = () => {
             </Link>
           </ul>
         )}
-
+        <li
+          className={selected === "classes" ? "active" : ""}
+          onClick={() => {
+            selected === "classes"
+              ? handleSelection("")
+              : handleSelection("classes")
+            setShowStudentsOptions(false)
+            setShowTeacherOptions(false)
+            setShowModeratorOptions(false)
+            setShowAttendanceOptions(false)
+            setShowClassesOptions(!showClassesOptions)
+          }}
+        >
+          <FaChalkboardTeacher className="icon" />
+          {isExpanded && "Classes"}
+        </li>
+        {showClassesOptions && isExpanded && (
+          <ul className="submenu">
+            <Link to="/admin/sections">
+              <li>
+                <FaList className="icon" /> Sections
+              </li>
+            </Link>
+          </ul>
+        )}
         <li
           className={selected === "attendance" ? "active" : ""}
           onClick={() => {

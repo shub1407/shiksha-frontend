@@ -6,13 +6,14 @@ const TeacherList = () => {
   const [teachers, setTeachers] = useState([])
   const [filteredTeachers, setFilteredTeachers] = useState([])
 
-  const [selectedClass, setSelectedClass] = useState("9")
+  const [selectedClass, setSelectedClass] = useState("all")
   const [selectedDay, setSelectedDay] = useState("all")
   const [selectedSubject, setSelectedSubject] = useState("all")
   const [selectedSections, setSelectedSections] = useState("all")
 
   const [loading, setLoading] = useState(true)
-
+  const [classes, setClasses] = useState([])
+  const [sections, setSections] = useState([])
   useEffect(() => {
     // Fetch teacher data from API
     const fetchTeachers = async () => {
@@ -35,6 +36,23 @@ const TeacherList = () => {
 
     fetchTeachers()
   }, [selectedClass])
+  useEffect(() => {
+    const fetchClass = async (req, res) => {
+      const response = await axios.get(`${backendUrl}/api/admins/all-classes`)
+      //const availableClasses = response.data.data.classes
+      const availableSections = response.data.data.sections
+      console.log(availableSections[9])
+      setLoading(false)
+      const a = []
+      for (let i = 1; i <= 12; i++) {
+        a.push(i.toString())
+      }
+      setClasses(a)
+      setSections(availableSections)
+    }
+
+    fetchClass()
+  }, [])
 
   const handleFilterChange = () => {
     let filtered = teachers
@@ -54,9 +72,12 @@ const TeacherList = () => {
       )
     }
     if (selectedSections !== "all") {
-      filtered = filtered.filter(
-        (teacher) => teacher.sectionName === selectedSections
-      )
+      if (selectedSections === "none") {
+        filtered = filtered.filter((teacher) => teacher.section == null)
+      } else
+        filtered = filtered.filter(
+          (teacher) => teacher.sectionName === selectedSections
+        )
     }
     console.log(teachers)
 
@@ -79,13 +100,19 @@ const TeacherList = () => {
             <div className="flex items-center space-x-2">
               <label className="text-gray-700">Class:</label>
               <select
-                onChange={(e) => setSelectedClass(e.target.value)}
+                onChange={(e) => {
+                  setSelectedClass(e.target.value)
+                  setSelectedSections("all")
+                }}
                 value={selectedClass}
                 className="px-4 py-2 border rounded-md bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
                 <option value="all">All</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
+                {classes.map((classLevel) => (
+                  <option key={classLevel} value={classLevel}>
+                    {classLevel}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="flex items-center space-x-2">
@@ -93,11 +120,18 @@ const TeacherList = () => {
               <select
                 onChange={(e) => setSelectedSections(e.target.value)}
                 value={selectedSections}
+                disabled={selectedClass === "all" ? true : false}
                 className="px-4 py-2 border rounded-md bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
                 <option value="all">All</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
+                {selectedClass !== "all" &&
+                  sections[selectedClass] &&
+                  sections[selectedClass].map((section) => (
+                    <option key={section} value={section}>
+                      {section}
+                    </option>
+                  ))}
+                <option value="none">None</option>
               </select>
             </div>
             <div className="flex items-center space-x-2">
@@ -108,8 +142,8 @@ const TeacherList = () => {
                 className="px-4 py-2 border rounded-md bg-white text-gray-800 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
                 <option value="all">All</option>
-                <option value="0">Day 0</option>
-                <option value="1">Day 1</option>
+                <option value="0">Mon-Wed</option>
+                <option value="1">Thurs-Sat</option>
               </select>
             </div>
             <div className="flex items-center space-x-2">
@@ -159,7 +193,8 @@ const TeacherList = () => {
                       Subject: {teacher.subject}
                     </p>
                     <p className="text-sm text-gray-600">
-                      Assigned Days: {teacher.assignedDays}
+                      Assigned Days:{" "}
+                      {teacher.assignedDays === "0" ? "Mon-Wed" : "Thurs-Sat"}
                     </p>
                   </div>
                 ))}

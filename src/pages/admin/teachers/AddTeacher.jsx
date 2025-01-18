@@ -24,6 +24,7 @@ const AddTeacher = () => {
       ...prevState,
       [name]: value,
     }))
+    console.log(formData)
   }
 
   const handleSubmit = async (e) => {
@@ -55,7 +56,10 @@ const AddTeacher = () => {
       setLoading(false)
     }
   }
-
+  const classes = []
+  for (let i = 1; i <= 12; i++) {
+    classes.push(i.toString())
+  }
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg max-w-xl mx-auto">
       <h3 className="text-2xl font-semibold text-center text-gray-800 mb-6">
@@ -127,47 +131,100 @@ const AddTeacher = () => {
         </div>
         <div>
           <label className="block text-gray-700">Class:</label>
-          <input
+          {/* <input
             type="text"
             name="class"
             value={formData.class}
             onChange={handleChange}
             required
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          /> */}
+          <select
+            name="class"
+            id=""
+            value={formData.class}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          >
+            <option value="">Select Class</option>
+            {classes.map((classItem) => (
+              <option key={classItem} value={classItem}>
+                {classItem}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-gray-700">Subject:</label>
-          <input
+          {/* <input
             type="text"
             name="subject"
             value={formData.subject}
             onChange={handleChange}
             required
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          /> */}
+          <select
+            name="subject"
+            id=""
+            value={formData.subject}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          >
+            <option value="">Select Subject</option>
+            <option value="Maths">Maths</option>
+            <option value="Science">Science</option>
+          </select>
         </div>
         <div>
-          <label className="block text-gray-700">Assigned Days:</label>
-          <input
+          <label className="block text-gray-700">Days Pref:</label>
+          {/* <input
             type="number"
             name="assignedDays"
             value={formData.assignedDays}
             onChange={handleChange}
             required
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          /> */}
+          <select
+            name="assignedDays"
+            id=""
+            value={formData.assignedDays}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          >
+            <option value="">Select day Pref</option>
+            <option value="0">Mon-Wed</option>
+            <option value="1">Thu-Sat</option>
+          </select>
         </div>
         <div>
           <label className="block text-gray-700">Year:</label>
-          <input
+          {/* <input
             type="number"
             name="year"
             value={formData.year}
             onChange={handleChange}
             required
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          /> */}
+          <select
+            name="year"
+            id=""
+            value={formData.year}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          >
+            <option value="">Select Year</option>
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+          </select>
         </div>
 
         <button
