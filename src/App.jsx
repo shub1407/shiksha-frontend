@@ -15,6 +15,7 @@ import AdminHomePage from "./pages/admin/AdminHomePage.jsx"
 import AdminDashboard from "./pages/admin/Dashboard.jsx"
 
 function App() {
+  console.log("backend url hai", backendUrl)
   const { loading } = useContext(AuthContext)
   if (loading) {
     return <div>Loading</div>

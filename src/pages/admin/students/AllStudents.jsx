@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { backendUrl } from "../../../utils/constants"
 
 const AllStudents = () => {
   const [students, setStudents] = useState([])
@@ -23,7 +24,7 @@ const AllStudents = () => {
   useEffect(() => {
     setLoading(true)
 
-    let url = `http://localhost:4000/api/admins/students/${selectedClass}`
+    let url = `${backendUrl}/api/admins/students/${selectedClass}`
     if (selectedSection) {
       url += `?section=${selectedSection}`
     }

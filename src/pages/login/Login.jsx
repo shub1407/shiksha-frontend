@@ -27,13 +27,13 @@ const Login = () => {
   }, [isAuthenticated])
 
   const navigate = useNavigate()
-
+  console.log("Req uel ", `${backendUrl}/api/admins/login`)
   const handleSubmit = async (e) => {
     const data = { email, password, role }
     e.preventDefault()
     setLoading(true)
     try {
-      const response = await axios.post(`${backendUrl}/login`, data, {
+      const response = await axios.post(`${backendUrl}/api/login`, data, {
         withCredentials: true,
       })
       setErrorMessage("") // Clear any previous error messages

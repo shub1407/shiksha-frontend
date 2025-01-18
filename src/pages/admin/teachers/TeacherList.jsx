@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
+import { backendUrl } from "../../../utils/constants"
 
 const TeacherList = () => {
   const [teachers, setTeachers] = useState([])
@@ -18,12 +19,10 @@ const TeacherList = () => {
       try {
         let response
         if (selectedClass === "all") {
-          response = await axios.get(
-            `http://localhost:4000/api/admins/view-teachers`
-          )
+          response = await axios.get(`${backendUrl}/api/admins/view-teachers`)
         } else
           response = await axios.get(
-            `http://localhost:4000/api/admins/view-teachers/${selectedClass}?section=all&day=all`
+            `${backendUrl}/api/admins/view-teachers/${selectedClass}?section=all&day=all`
           )
         setTeachers(response.data.data)
         setFilteredTeachers(response.data.data)

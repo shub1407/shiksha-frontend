@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import "./HolidayManager.css"
-
+import { backendUrl } from "../../../utils/constants"
 const HolidayManager = () => {
   const [holidays, setHolidays] = useState([])
   const [showModal, setShowModal] = useState(false)
@@ -22,9 +22,7 @@ const HolidayManager = () => {
 
   const fetchHolidays = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:4000/api/attendance/holiday"
-      )
+      const response = await axios.get(`${backendUrl}/api/attendance/holiday`)
       setHolidays(response.data.holidays)
     } catch (error) {
       console.error("Failed to fetch holidays", error)
@@ -38,10 +36,7 @@ const HolidayManager = () => {
 
   const handleAddHoliday = async () => {
     try {
-      await axios.post(
-        "http://localhost:4000/api/attendance/add-holiday",
-        newHoliday
-      )
+      await axios.post(`${backendUrl}/api/attendance/add-holiday`, newHoliday)
       fetchHolidays()
       setNewHoliday({ startDate: "", endDate: "", description: "" })
       setShowModal(false)

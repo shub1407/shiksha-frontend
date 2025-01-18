@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react"
 import axios from "axios"
-
+import { backendUrl } from "../utils/constants"
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
@@ -12,12 +12,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/api/auth-status",
-          {
-            withCredentials: true, // Include cookies for auth
-          }
-        )
+        const response = await axios.get(`${backendUrl}/api/auth-status`, {
+          withCredentials: true, // Include cookies for auth
+        })
         console.log(response.data)
         console.log("Context ke andar auth status m")
 

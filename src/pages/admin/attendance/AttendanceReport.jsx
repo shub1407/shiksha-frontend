@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import "./AttendanceStatus.css"
-
+import { backendUrl } from "../../../utils/constants"
 const AttendanceStatus = () => {
   const [attendanceData, setAttendanceData] = useState([])
   const [holidays, setHolidays] = useState([])
@@ -62,7 +62,7 @@ const AttendanceStatus = () => {
       let response
 
       response = await axios.post(
-        `http://localhost:4000/api/attendance/report/${className}/${sectionName}/${month}/${year}`,
+        `${backendUrl}/api/attendance/report/${className}/${sectionName}/${month}/${year}`,
         {
           userType,
         }
@@ -86,9 +86,7 @@ const AttendanceStatus = () => {
   const fetchHolidays = async () => {
     try {
       setLoading(true)
-      const response = await axios.get(
-        `http://localhost:4000/api/attendance/holiday`
-      )
+      const response = await axios.get(`${backendUrl}/api/attendance/holiday`)
       const holidayList = response.data.holidays.flatMap((holiday) => {
         const startDate = new Date(
           new Date(holiday.startDate).getTime() + 5.5 * 60 * 60 * 1000

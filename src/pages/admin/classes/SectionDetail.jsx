@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import React, { useState, useEffect } from "react"
 import axios from "axios"
+import { backendUrl } from "../../../utils/constants"
 
 export function SectionDetail() {
   const { sectionId } = useParams()
@@ -19,7 +20,7 @@ export function SectionDetail() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/admins/class-detail/${sectionId}`
+          `${backendUrl}/api/admins/class-detail/${sectionId}`
         )
         setData(response.data.data)
         setLoading(false)
@@ -35,7 +36,7 @@ export function SectionDetail() {
   const fetchUnassignedStudents = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/admins/students/${data.class}?section=none`
+        `${backendUrl}/api/admins/students/${data.class}?section=none`
       )
       setUnassignedStudents(response.data.data)
       setShowModal(true) // Open modal
@@ -46,7 +47,7 @@ export function SectionDetail() {
   const fetchUnassignedTeachers = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/admins/view-teachers/${data.class}?section=none&day=all `
+        `${backendUrl}/api/admins/view-teachers/${data.class}?section=none&day=all `
       )
       setUnassignedTeachers(response.data.data)
       console.log(response.data.data)
@@ -67,13 +68,13 @@ export function SectionDetail() {
   const assignStudentsToSection = async () => {
     try {
       // Assign all selected students to the section
-      await axios.post(`http://localhost:4000/api/admins/assign-students`, {
+      await axios.post(`${backendUrl}/api/admins/assign-students`, {
         sectionId: data._id,
         studentId: selectedStudents,
       })
       // Re-fetch the section data to update the list of students
       const response = await axios.get(
-        `http://localhost:4000/api/admins/class-detail/${sectionId}`
+        `${backendUrl}/api/admins/class-detail/${sectionId}`
       )
       setData(response.data.data)
       setShowModal(false) // Close modal after assigning students
@@ -84,13 +85,13 @@ export function SectionDetail() {
   const assignTeacherToSection = async () => {
     try {
       // Assign all selected students to the section
-      await axios.post(`http://localhost:4000/api/admins/assign-teacher`, {
+      await axios.post(`${backendUrl}/api/admins/assign-teacher`, {
         sectionId: data._id,
         teacherId: selectedTeachers,
       })
       // Re-fetch the section data to update the list of students
       const response = await axios.get(
-        `http://localhost:4000/api/admins/class-detail/${sectionId}`
+        `${backendUrl}/api/admins/class-detail/${sectionId}`
       )
       setData(response.data.data)
       setShowModal(false) // Close modal after assigning students

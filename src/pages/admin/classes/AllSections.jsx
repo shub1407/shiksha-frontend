@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import { backendUrl } from "../../../utils/constants"
 const AllSections = () => {
   const [classes, setClasses] = useState([])
   const [selectedClass, setSelectedClass] = useState("9")
@@ -13,7 +14,7 @@ const AllSections = () => {
   const fetchSections = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/admins/class/${selectedClass}`
+        `${backendUrl}/api/admins/class/${selectedClass}`
       )
       setSections(response.data.data || [])
     } catch (error) {
@@ -31,7 +32,7 @@ const AllSections = () => {
     }
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/admins/create-section`,
+        `${backendUrl}/api/admins/create-section`,
         null,
         {
           params: {

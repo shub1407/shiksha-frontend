@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
+import { backendUrl } from "../../utils/constants"
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -15,7 +16,7 @@ const Dashboard = () => {
       try {
         setLoading(true)
         const response = await axios.get(
-          "http://localhost:4000/api/admins/dashboard-stats"
+          `${backendUrl}/api/admins/dashboard-stats`
         )
         const data = response.data.data
         setStats(data)

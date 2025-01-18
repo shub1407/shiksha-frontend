@@ -7,15 +7,12 @@ const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [role, setRole] = useState("admin")
-
+  console.log("Req uel ", `${backendUrl}/api/admins/login`)
   const handleSubmit = async (e) => {
     const data = { email, password }
     e.preventDefault()
     try {
-      const response = await axios.post(
-        `http://localhost:4000/api/admins/login`,
-        data
-      )
+      const response = await axios.post(`${backendUrl}/api/admins/login`, data)
       console.log(response)
     } catch (error) {
       console.log(error)

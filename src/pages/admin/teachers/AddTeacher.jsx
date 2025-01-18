@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import axios from "axios"
+import { backendUrl } from "../../../utils/constants"
 
 const AddTeacher = () => {
   const [formData, setFormData] = useState({
@@ -33,7 +34,7 @@ const AddTeacher = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/admins/create-teacher",
+        `${backendUrl}/api/admins/create-teacher`,
         formData
       )
       setSuccessMessage("Teacher added successfully!")

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react"
 import axios from "axios"
 import { AuthContext } from "../../../context/AuthContext"
+import { backendUrl } from "../../../utils/constants"
 
 const TakeTeacherAttendance = () => {
   const [attendanceDate, setAttendanceDate] = useState("")
@@ -23,7 +24,7 @@ const TakeTeacherAttendance = () => {
     setError("")
     try {
       const attendanceStatus = await axios.post(
-        "http://localhost:4000/api/attendance/check-attendance-status",
+        `${backendUrl}/api/attendance/check-attendance-status`,
         {
           attendanceDate,
           userType: "teacher",
@@ -45,7 +46,7 @@ const TakeTeacherAttendance = () => {
 
       setIsAttendanceAlreadyMarked(false)
       const response = await axios.get(
-        `http://localhost:4000/api/admins/view-teachers/${classInput}?section=all&day=${dayPref}`
+        `${backendUrl}/api/admins/view-teachers/${classInput}?section=all&day=${dayPref}`
       )
       if (!response.data.error) {
         setTeachers(
@@ -104,7 +105,7 @@ const TakeTeacherAttendance = () => {
       setError("")
 
       const response = await axios.post(
-        "http://localhost:4000/api/attendance/mark-attendance-teacher",
+        `${backendUrl}/api/attendance/mark-attendance-teacher`,
         obj
       )
 
@@ -128,9 +129,7 @@ const TakeTeacherAttendance = () => {
     setError("")
     try {
       setIsAttendanceAlreadyMarked(false)
-      const response = await axios.get(
-        `http://localhost:4000/api/admins/view-teachers`
-      )
+      const response = await axios.get(`${backendUrl}/api/admins/view-teachers`)
       if (!response.data.error) {
         setTeachers(
           response.data.data.map((teacher) => ({

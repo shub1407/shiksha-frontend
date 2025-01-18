@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react"
 import axios from "axios"
 import { AuthContext } from "../../../context/AuthContext"
+import { backendUrl } from "../../../utils/constants"
 const Attendance = () => {
   const [classInput, setClassInput] = useState("")
   const [sectionInput, setSectionInput] = useState("")
@@ -23,7 +24,7 @@ const Attendance = () => {
     setError("")
     try {
       const attendanceStatus = await axios.post(
-        "http://localhost:4000/api/attendance/check-attendance-status",
+        `${backendUrl}/api/attendance/check-attendance-status`,
         {
           classInput,
           sectionInput,
@@ -48,7 +49,7 @@ const Attendance = () => {
       }
       setIsAttendanceAlreadyMarked(false)
       const response = await axios.get(
-        `http://localhost:4000/api/admins/students/${classInput}?section=${sectionInput}`
+        `${backendUrl}/api/admins/students/${classInput}?section=${sectionInput}`
       )
       if (!response.data.error) {
         setStudents(
@@ -87,7 +88,7 @@ const Attendance = () => {
     try {
       setIsAttendanceAlreadyMarked(false)
       const response = await axios.get(
-        `http://localhost:4000/api/admins/students/${classInput}?section=${sectionInput}`
+        `${backendUrl}/api/admins/students/${classInput}?section=${sectionInput}`
       )
       if (!response.data.error) {
         setStudents(
@@ -131,7 +132,7 @@ const Attendance = () => {
       setError("")
 
       const response = await axios.post(
-        "http://localhost:4000/api/attendance/mark-attendance",
+        `${backendUrl}/api/attendance/mark-attendance`,
         obj
       )
 

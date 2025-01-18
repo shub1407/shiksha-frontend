@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { backendUrl } from "../../../utils/constants"
 
 const AddStudent = () => {
   const [name, setName] = useState("")
@@ -21,16 +22,13 @@ const AddStudent = () => {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:4000/api/admins/create-student",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(studentData),
-        }
-      )
+      const response = await fetch(`${backendUrl}/api/admins/create-student`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(studentData),
+      })
 
       const data = await response.json()
 
